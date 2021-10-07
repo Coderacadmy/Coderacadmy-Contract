@@ -1,0 +1,49 @@
+pragma solidity ^0.7.0;
+
+
+contract receiveEther{
+    // Fallback function is called when msg.data is not empty
+    fallback() external payable {}
+
+    
+    function getBalance() public view returns(uint) {
+       return address(this).balance;
+    }
+}
+
+
+contract sendEther{
+    
+    function sendViaTransfer (address payable _to) public payable {
+        _to.transfer(msg.value);
+    }
+    
+    function sendViaSend (address payable _to) public payable{
+        bool sent = _to.send(msg.value);
+    }
+     
+    
+    function sendViaCall(address payable _to) public payable {
+    // Call returns a boolean value indicating success or failure.
+    // This is the current recommended method to use.
+        (bool sent, bytes memory data) = _to.call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
+    }
+
+}
+
+contract transfer{
+    
+    address payable myaddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    
+    function sendFunds() external payable returns(bool){
+        bool isfundsSent = myaddress.send(msg.value);
+        return isfundsSent;
+    }
+    
+    function transferFunds() public payable{
+     myaddress.transfer(msg.value);
+        
+    }
+    
+}
