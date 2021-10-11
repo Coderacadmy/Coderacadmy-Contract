@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;
+
+contract SchoolPayroll{
+    
+    address public token;
+    address public owner;
+    
+    constructor(address Q3Token){
+        owner = msg.sender;
+        token = Q3Token;
+    }
+    
+    function payFees(uint256 amount) external {
+        // student msg.sender..
+        // token.transfer(msg.sender, owner, amount);
+        bytes memory  method = abi.encodeWithSignature(
+          "transfer(address, address, uint256)",
+          msg.sender,
+          owner,
+          amount);
+          
+    token.call(method);
+    }
+    
+    function paySalary(address teacher, uint256 amount) external {
+        // token.transfer(owner, teacher, amount);
+    }
+}
