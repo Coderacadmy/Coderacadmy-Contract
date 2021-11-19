@@ -3,8 +3,17 @@ pragma solidity ^0.8.0;
 
 contract MyContract {
     
+     // 21t way for transfer ethers to contract address
+    
     function invest(address payable _receiver) external payable {
         _receiver.send(msg.value);
+        
+    }
+    
+    // 2st way for transfer ethers to contract address
+    
+    function send() external payable {
+        
         
     }
     
@@ -13,3 +22,4 @@ contract MyContract {
         
     }
 }    
+    
