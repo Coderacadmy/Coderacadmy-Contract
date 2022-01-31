@@ -57,3 +57,54 @@ contract Approved_Seller{
     }
     
 }//end of contract
+
+
+
+// SPDX-License-Identifier: MIT OR Apache-2.0
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+import "hardhat/console.sol";
+
+contract NFT is Ownable, ERC721URIStorage {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+
+    address private _royaltiesReceiver;
+    // Percentage of each sale to pay as royalties
+    uint256 public constant royaltiesPercentage = 5;
+
+    constructor(address initialRoyaltiesReceiver) ERC721("Metaverse", "METT") {
+        _royaltiesReceiver = initialRoyaltiesReceiver;
+    }
+
+    function createToken(string memory tokenURI) public returns (uint) {
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+
+        _mint(msg.sender, newItemId);
+        _setTokenURI(newItemId, tokenURI);
+        setApprovalForAll(_royaltiesReceiver, true);
+        return newItemId;
+    }
+
+    function royaltiesReceiver() external returns(address) {
+        return _royaltiesReceiver;
+    }
+
+    function setRoyaltiesReceiver(address newRoyaltiesReceiver)
+    external onlyOwner {
+        require(newRoyaltiesReceiver != _royaltiesReceiver); // dev: Same address
+        _royaltiesReceiver = newRoyaltiesReceiver;
+    }
+
+    function royaltyInfo(uint256 _tokenId, uint256 _salePrice) external view
+    returns (address receiver, uint256 royaltyAmount) {
+        uint256 _royalties = (_salePrice * royaltiesPercentage) / 100;
+        return (_royaltiesReceiver, _royalties);
+    }
+}
