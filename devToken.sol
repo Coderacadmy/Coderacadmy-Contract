@@ -14,16 +14,13 @@ contract DevToken{
       // Transfer event
       event Transfer(address sender, address to, uint256 amount);
       // Approval event
-      event Approval(address From, address spender, uint256 amount);
-      
-      
+      event Approval(address From, address spender, uint256 amount);   
       
       // Blance mapping
       mapping (address => uint256) public balanceOf;
       // Allowance mapping
       mapping (address => mapping(address => uint256)) public allowance;
-         
-      
+            
       constructor (uint256 _totalsupply){
           TotalSupply = _totalsupply;
           balanceOf[msg.sender] = _totalsupply;
@@ -40,8 +37,7 @@ contract DevToken{
      // emit transfer event
      emit Transfer(msg.sender, _To, _amount);
      }
-     
-     
+      
      // Approve function 
      function Approve(address _spender, uint256 _amount) public{
      // increase Allowance
@@ -63,22 +59,9 @@ contract DevToken{
      // Decrase the amount
      allowance[_from][msg.sender] -= _amount;
      // emit Transfer
-     emit Transfer(_from, _to, _amount);
-     
+     emit Transfer(_from, _to, _amount);  
      // emit Approval
      emit Approval(_from, msg.sender, _amount);
          
-     }
-     
-     
-     
-     
-     
-     
-     
+     }    
 }
-
-
-
-
-
